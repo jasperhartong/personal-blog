@@ -13,18 +13,20 @@ export async function generateMetadata(props) {
     return { title: "Jasper Hartong's Blog" }
   }
   const { metadata } = await importPage(params.mdxPath)
-  const { title, description } = metadata
+  const { title, description, ogImage } = metadata
   return {
     ...metadata,
     openGraph: {
       title,
       description,
-      type: 'article'
+      type: 'article',
+      ...(ogImage && { images: [{ url: ogImage }] })
     },
     twitter: {
-      card: 'summary',
+      card: ogImage ? 'summary_large_image' : 'summary',
       title,
-      description
+      description,
+      ...(ogImage && { images: [ogImage] })
     }
   }
 }
