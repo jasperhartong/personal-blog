@@ -1,0 +1,125 @@
+---
+title: Closing the loop between SketchUp and AI-agents to automate boring design details
+date: 2026-02-23
+github: https://github.com/jasperhartong/sketchup-code
+---
+
+<Figure
+  src="/im-on-a-boat.jpeg"
+  alt="Me sitting on a forklift"
+  width={600}
+  height={400}
+  caption="Look mom! Practicing for the AI collapse!"
+/>
+
+Last week I spent three days as an intern at my friend's eco-housing construction company [Bouwpioniers](https://www.bouwpioniers.com).
+
+I wanted to tip my toes into an alternative career opportunity for _~~when~~_ if AI takes over my job. And have a warming up for my home-office construction in my new house.
+
+After two days of letting my soft IT-hands explore new unfriendly territory (rough wood, some splinters, heavy concrete tiles…), I did find myself back behind my laptop for a few hours on the last day.
+
+My hands were itching to optimize some internal SketchUp design chores.
+
+## **Beams all the way down**
+
+The floors, walls, roof and integrated furniture of their eco-houses are all based around beam skeleton structures. As each house is completely custom built, and deadlines are tight they sometimes need to resort to SketchUp 3D for last-minute design work in addition to the technical drawings delivered in Tekla. Sometimes only just-in-time delivering print-outs of their millimeter precision plans.
+
+This well-standardised time sink seemed like a perfect candidate to pay back for the hospitality and mentorship of the past two days.
+
+<Figure
+  src="/dimensions.png"
+  alt="Screenshot of SketchUp showing the beam skeleton and dimensions"
+  width={600}
+  height={400}
+  caption="A look at the end-result in SketchUp, so you know what I mean with a beam skeleton. Look at those nicely generated dimensions that also include the (vital) diagonal cross-checks."
+/>
+
+## **Laying the shoddy ground work**
+
+SketchUp apparently has a Ruby API to develop plugins and extend its 3D modelling capabilities. To my surprise it was quite well documented and even has some nice developer tools to run code from an in-app console and debug it from within your code editor.
+
+So, bootstrapping the "Skeleton Dimension" plugin was a breeze. And the initial code to show ***some*** dimensions that made ***some*** sense was also quite easy to prompt.
+
+Applying Bouwpioniers's complete internal measurement standards though, thát would require quite some careful iteration. And running the code manually from the console was getting tiresome fast. It was time to remove the bottleneck (me/human); to enable full agentic programming.
+
+## **Building virtual bridges**
+
+The SketchUp Ruby API doesn't allow external applications to run any code directly. It always needs to be initiated by the user in SketchUp: either by using the packaged plugin, or by running it in the in-app Ruby console.
+
+In order to allow my coding agents in Cursor to gain immediate feedback on any adjustments made and be able to iterate completely independent, a workaround was needed.
+
+Enter – **"SketchUp Bridge"**: a separate plugin to close the agentic feedback loop.
+
+- After installation, SketchUp can start listening to a specific `command.rb` file for changes.
+- If the agent adjusts that command file, the app will run the Ruby code within and output the results to a specific `results.txt` file (e.g logs from the command)
+- The agent can now read that file to see the results of its command
+
+So now: I can prompt with intricate requirements, hit enter, and walk away to help out in the construction hall; while my editor starts writing code and remotely validating it in SketchUp.
+
+<Figure
+  src="/plugin.png"
+  alt="Screenshot of SketchUp showing the menu item of the plugin and ruby console"
+  width={600}
+  height={400}
+  caption="Letting an agent write a plugin so other agents can start writing more plugins without me…"
+/>
+
+## **Ramping up the production cycle**
+
+Now that there is a tight feedback loop, I still took some time to also optimize the context that the agents have access to: all the additional relevant information they use when they are fed a prompt by me. For this I added several additional [rules](https://cursor.com/docs/context/rules), [skills](https://cursor.com/docs/context/skills) and Ruby utils to the Sketchup Bridge.
+
+- **Rule: SketchUp Bridge**
+  - Describes when and how to use it. Includes a rule to add any pitfalls agents bump into while using it.
+- **Rule: SketchUp Ruby API Docs**
+  - Links to a markdown file with an alphabetic index of the original online documentation. Includes rules to add quick references.
+- **Skill: Refactor with Validation**
+  - Refactoring workflow that captures a baseline of every dimension's exact coordinates before any code change, to compare the output after refactoring to catch regressions.
+- **Skill: Package Plugin**
+  - Packages a plugin into an installable `.rbz` plugin, bumping the version, updating the changelog, and tagging a release.
+- **Ruby Util: Take Screenshot**
+  - Allows to take a screenshot of the current state of the SketchUp file, will be saved next to the results file to allow visual feedback to the agent.
+
+<Figure
+  src="/agent.png"
+  alt="Screenshot of my agent output in cursor"
+  width={600}
+  height={400}
+  caption="My agent showing my he did good with a screenshot"
+/>
+
+## **Final walkthrough**
+
+After some additional careful prompting and quick hallway testing, the plugin is now zipped and distributed by e-mail: ready to be tested in the day-to-day work of Bouwpioniers.
+
+### **Takeaways**
+
+- Take your time to create automated feedback loops. It pays off quickly.
+- Take your time to review the reasoning output of your agents to discover what additional context to add (skills/ rules). It will save you tokens.
+- LLM's might still have a hard time with some trigonometry. Opus 4.6 performed best, but sometimes got stuck, burning through a lot of tokens
+- Having access to a raw Ruby API feels much more powerful than any other ([MCP](https://modelcontextprotocol.io/docs/getting-started/intro)) API
+- Just one more point about tight feedback loops: having the actual end-users be around you while working on a project might just be the best accelerator
+
+For now, I'm just very curious how good the agents are in creating 3D designs from scratch in SketchUp. My next step is to start applying the practical lessons learned at Bouwpioniers and start on my very first own piece of furniture.
+
+<Image
+  src="/sketchup-bridge.png"
+  alt="Logo of SketchUp on the left; logo of Cursor on the right; 2 arrows pointing to left and right in between logo's"
+  width={257}
+  height={121}
+/>
+
+### **Source available**
+
+The packaged plugins and code are available on Github:
+
+- [github.com/jasperhartong/sketchup-code](https://github.com/jasperhartong/sketchup-code) (MIT licensed)
+  - [SketchUp Bridge Plugin](https://github.com/jasperhartong/sketchup-code/blob/main/plugins/timmerman_sketchup_bridge/core.rb)
+  - [Skeleton Dimension Plugin](https://github.com/jasperhartong/sketchup-code/blob/main/plugins/timmerman_skeleton_dimensions/core.rb)
+
+---
+
+_Thanks to Marcel for having me over and all the awesome people at Bouwpioniers for the warm welcome and all the guidance! Thanks for being ok with me open sourcing this and writing this short (handwritten 😅) blog post_
+
+---
+
+_SketchUp is a trademark of Trimble Inc. Cursor is a trademark of Anysphere Inc. All trademarks, logos, and brand names mentioned or shown in the blog post belong to their respective owners. This project is not affiliated with or endorsed by Trimble or Anysphere._
