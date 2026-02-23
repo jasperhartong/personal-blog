@@ -6,7 +6,7 @@ import 'nextra-theme-blog/style.css'
  
 const siteUrl = 'https://jasperhartong.com'
 const description =
-  'Blog by Jasper Hartong — writing about AI agents, creative coding, and building things.'
+  'Blog by Jasper Hartong — writing about stuff.'
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
