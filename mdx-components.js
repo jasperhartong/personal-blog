@@ -66,6 +66,22 @@ function Figure({ caption, ...imageProps }) {
   );
 }
 
+function Callout({ children }) {
+  return (
+    <aside
+      style={{
+        padding: "1rem 1.25rem",
+        borderRadius: "0.5rem",
+        backgroundColor: "rgba(34, 197, 94, 0.08)",
+        border: "1px solid rgba(34, 197, 94, 0.25)",
+        marginTop: "2rem",
+      }}
+    >
+      {children}
+    </aside>
+  );
+}
+
 export function useMDXComponents(components) {
   const ThemeWrapper = themeComponents.wrapper;
 
@@ -74,6 +90,7 @@ export function useMDXComponents(components) {
     ...components,
     Image: (props) => <Image {...props} />,
     Figure,
+    Callout,
     wrapper({ children, metadata }) {
       return (
         <ThemeWrapper metadata={metadata}>

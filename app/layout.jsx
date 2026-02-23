@@ -39,20 +39,8 @@ export const metadata = {
 }
  
 export default async function RootLayout({ children }) {
-  const banner = (
-    <Banner storageKey="opportunity-banner">
-    🌿🇪🇺 Running a nature restoration project in Europe? I'm looking for an opportunity combining hands-on and automation work! {" "}
-    <a
-      href="https://www.linkedin.com/in/jasperhartong/"
-      style={{
-        textDecoration: 'underline',
-        textUnderlinePosition: 'from-font'
-      }}
-    >
-      Reach out →
-    </a>
-  </Banner>
-  )
+  const banner = null
+  
  
   return (
     <html lang="en" suppressHydrationWarning>
