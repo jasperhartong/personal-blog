@@ -6,7 +6,20 @@ export const generateStaticParams = generateStaticParamsFor('mdxPath')
 export async function generateMetadata(props) {
   const params = await props.params
   const { metadata } = await importPage(params.mdxPath)
-  return metadata
+  const { title, description } = metadata
+  return {
+    ...metadata,
+    openGraph: {
+      title,
+      description,
+      type: 'article'
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description
+    }
+  }
 }
  
 const Wrapper = getMDXComponents().wrapper
