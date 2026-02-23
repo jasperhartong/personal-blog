@@ -78,7 +78,7 @@ export function useMDXComponents(components) {
       return (
         <ThemeWrapper metadata={metadata}>
           {metadata.github && (
-            <div style={{ marginTop: "-1.25rem", marginBottom: "1.5rem" }}>
+            <div style={{ marginTop: "-2rem", marginBottom: "1.5rem" }}>
               <GitHubLink url={metadata.github} />
             </div>
           )}
