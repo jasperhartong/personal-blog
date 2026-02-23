@@ -4,8 +4,37 @@ import { getPageMap } from 'nextra/page-map'
 import { HomeLink } from './home-link'
 import 'nextra-theme-blog/style.css'
  
+const siteUrl = 'https://jasperhartong.com'
+const description =
+  'Blog by Jasper Hartong — writing about AI agents, creative coding, and building things.'
+
 export const metadata = {
-  title: 'Jasper Hartong - Home'
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: 'Jasper Hartong',
+    template: '%s — Jasper Hartong'
+  },
+  description,
+  authors: [{ name: 'Jasper Hartong', url: siteUrl }],
+  openGraph: {
+    title: 'Jasper Hartong',
+    description,
+    url: siteUrl,
+    siteName: 'Jasper Hartong',
+    locale: 'en_US',
+    type: 'website'
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Jasper Hartong',
+    description
+  },
+  alternates: {
+    canonical: siteUrl,
+    types: {
+      'application/rss+xml': `${siteUrl}/feed.xml`
+    }
+  }
 }
  
 export default async function RootLayout({ children }) {

@@ -1,10 +1,6 @@
 import { PostCard } from 'nextra-theme-blog'
 import { getPosts } from './get-posts'
 
-export const metadata = {
-  title: 'Jasper Hartong - Home'
-}
-
 export default async function IndexPage() {
   const posts = await getPosts()
   return (
