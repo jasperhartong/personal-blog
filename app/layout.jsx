@@ -2,6 +2,7 @@ import { Footer, Layout, Navbar, ThemeSwitch } from 'nextra-theme-blog'
 import { Banner, Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import { HomeLink } from './home-link'
+import { Analytics } from '@vercel/analytics/next'
 import 'nextra-theme-blog/style.css'
  
 const siteUrl = 'https://jasperhartong.com'
@@ -78,6 +79,7 @@ export default async function RootLayout({ children }) {
             </a>
           </Footer>
         </Layout>
+        <Analytics />
       </body>
     </html>
   )
